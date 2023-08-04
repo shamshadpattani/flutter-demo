@@ -26,53 +26,105 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: appBar(),
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
           _searchBox(),
           SizedBox(height: 30),
           _category(),
-        SizedBox(height: 30,),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start ,
-            children: [
-              Padding(padding: EdgeInsets.only(left: 24),
-              child: Text("Recommentaion\n for  diet",
+        SizedBox(height: 30),
+          _recommentDiet(),
+          SizedBox(height: 30),
+          _popularDiet(),
+          SizedBox(height: 20)
+        ]
+         )
+      );
+  }
+
+
+  Column _popularDiet() {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start ,
+        children: [
+          Padding(padding: EdgeInsets.only(left: 24),
+              child: Text("Popular",
                 style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),)
-              ),
-              SizedBox(height: 15),
-              Container(
-                height: 300,
-                color: Colors.white,
-                child: ListView.separated(
-                   scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(left: 20,right: 20),
-                    separatorBuilder: (BuildContext context, int index) => SizedBox(width: 20),
-                    itemCount: diets.length,
-                itemBuilder: (context, index) {
+          ),
+          SizedBox(height: 15),
+          Container(
+              color: Colors.white,
+              child: ListView.separated(
+                  physics: NeverScrollableScrollPhysics(), // Prevents independent scrolling
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(left: 20,right: 20),
+                  separatorBuilder: (BuildContext context, int index) => SizedBox(height: 20),
+                  itemCount: diets.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        elevation:4,
+                        surfaceTintColor: Colors.amberAccent,
+                        shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        borderRadius: const BorderRadius.all(Radius.circular(12))
+                    ),
+                        child:Container(
+                          margin: EdgeInsets.only(top:30,bottom: 30, left: 10, right: 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(height:25,
+                                    child: Image.network(diets[index].icon)),
+                                Text(diets[index].name),
+                                Text("${diets[index].calories} | ${diets[index].duration} | ${diets[index].level}", style: TextStyle(color: Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10)),
+                              ]),
+                        )
+                    );
+                  })
+          )]
+    );
+  }
+
+
+  Column _recommentDiet() {
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.start ,
+          children: [
+            Padding(padding: EdgeInsets.only(left: 24),
+            child: Text("Recommentaion\n for  diet",
+              style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),)
+            ),
+            SizedBox(height: 15),
+            Container(
+              height: 200,
+              color: Colors.white,
+              child: ListView.separated(
+                 scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.only(left: 20,right: 20),
+                  separatorBuilder: (BuildContext context, int index) => SizedBox(width: 20),
+                  itemCount: diets.length,
+              itemBuilder: (context, index) {
                 return Container(
-                width: 280,
+                width: 180,
                 decoration: BoxDecoration(
                 color: diets[index].color.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(15),),
                 child:Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                Container(
-                  width :150,
-                  height:150,
-                  child: Image.network(diets[index].icon)),
-                  Text(diets[index].name)
-                ],
-       )
-          );
-        })
-                      )
-         ]
-        )
-      ]
-      )
-    );
-
+                Container(height:100,
+                    child: Image.network(diets[index].icon)),
+                Text(diets[index].name),
+                Text("${diets[index].calories} | ${diets[index].duration} | ${diets[index].level}", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,
+                fontSize: 10)),
+                ])
+                );
+                 })
+         )]
+      );
   }
 
   Column _category() {
